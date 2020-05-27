@@ -1,0 +1,65 @@
+// If you want to run as a non-root user in the container, see .devcontainer/docker-compose.yml.
+{
+  "name": "Existing Docker Compose (Extend)",
+  // Update the 'dockerComposeFile' list if you have more compose files or use different names.
+  // The .devcontainer/docker-compose.yml file contains any overrides you need/want to make.
+  "dockerComposeFile": [
+    "docker-compose.yml",
+    "docker-compose.dev.yml"
+  ],
+  "remoteUser": "1000",
+  // The 'service' property is the name of the service for the container that VS Code should
+  // use. Update this value and .devcontainer/docker-compose.yml to the real service name.
+  "service": "app",
+  // The optional 'workspaceFolder' property is the path VS Code should open by default when
+  // connected. This is typically a file mount in .devcontainer/docker-compose.yml
+  "workspaceFolder": "/home/ruby/app",
+  // Use 'settings' to set *default* container specific settings.json values on container create.
+  // You can edit these settings after create using File > Preferences > Settings > Remote.
+  "settings": {
+    // This will ignore your local shell user setting for Linux since shells like zsh are typically
+    // not in base container images. You can also update this to an specific shell to ensure VS Code
+    // uses the right one for terminals and tasks. For example, /bin/bash (or /bin/ash for Alpine).
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+  // Uncomment the next line if you want start specific services in your Docker Compose config.
+  "runServices": [
+    "db",
+    "app"
+  ],
+  // Uncomment the next line if you want to keep your containers running after VS Code shuts down.
+  // "shutdownAction": "none",
+  // Uncomment the next line to run commands after the container is created - for example installing git.
+  "postCreateCommand": "sudo chown -R 1000:1000 /home/ruby",
+  // Add the IDs of extensions you want installed when the container is created in the array below.
+  "extensions": [
+    "rebornix.ruby",
+    "castwide.solargraph",
+    "robinbentley.sass-indented",
+    "formulahendry.auto-complete-tag",
+    "formulahendry.auto-rename-tag",
+    "mads-hartmann.bash-ide-vscode",
+    "patrys.vscode-code-outline",
+    "alexkrechik.cucumberautocomplete",
+    "kaiwood.endwise",
+    "dbaeumer.vscode-eslint",
+    "tombonnike.vscode-status-bar-format-toggle",
+    "eamodio.gitlens",
+    "yzhang.markdown-all-in-one",
+    "shd101wyy.markdown-preview-enhanced",
+    "eg2.vscode-npm-script",
+    "christian-kohler.npm-intellisense",
+    "christian-kohler.path-intellisense",
+    "esbenp.prettier-vscode",
+    "foxundermoon.shell-format",
+    "richie5um2.vscode-sort-json",
+    "fabiospampinato.vscode-statusbar-debugger",
+    "albert.tabout",
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "octref.vetur",
+    "visualstudioexptteam.vscodeintellicode",
+    "tomoki1207.pdf",
+    "dariofuzinato.vue-peek",
+    "mubaidr.vuejs-extension-pack"
+  ]
+}

@@ -1,0 +1,58 @@
+version: "3.7"
+services:
+  app:
+    build:
+      target: builder
+      args:
+        rails_env: development
+        node_env: development
+    image: "${PROJECT_NAME}_app_dev:latest"
+    container_name: "${PROJECT_NAME}_app_dev"
+    hostname: "${PROJECT_NAME}_app_dev"
+    ports:
+      - "4000:4000"
+    env_file: .docker_container_dev.env
+    environment:
+      DB_HOST: "db_dev.${PROJECT_NAME}"
+    volumes:
+      # Update this to wherever you want VS Code to mount the folder of your project
+      - type: volume
+        source: app_home
+        target: "${APP_USER_HOME}"
+        consistency: cached
+        volume:
+          nocopy: true
+      - type: volume
+        source: app_vendor_bundle
+        target: "${APP_ROOT}/vendor/bundle"
+        consistency: cached
+        volume:
+          nocopy: true
+      - type: volume
+        source: app_node_modules
+        target: "${APP_ROOT}/node_modules"
+        consistency: cached
+        volume:
+          nocopy: true
+      - type: bind
+        source: .
+        target: "${APP_ROOT}"
+        consistency: cached
+      # Uncomment the next line to use Docker from inside the container. See https://aka.ms/vscode-remote/samples/docker-in-docker-compose for details.
+      # - /var/run/docker.sock:/var/run/docker.sock
+    # Overrides default command so things don't shut down after the process ends.
+    command: "sh -c 'sudo chown -R 1000:1000 $APP_USER_HOME && sleep infinity'"
+  db:
+    container_name: "db_dev.${PROJECT_NAME}"
+    hostname: "db_dev.${PROJECT_NAME}"
+    env_file: .docker_container_dev.env
+
+volumes:
+  db_data:
+    name: "${PROJECT_NAME}_dev_db_data"
+  app_node_modules:
+    name: "${PROJECT_NAME}_app_node_modules_dev"
+  app_vendor_bundle:
+    name: "${PROJECT_NAME}_app_vendor_bundle_dev"
+  app_home:
+    name: "${PROJECT_NAME}_app_home_dev"

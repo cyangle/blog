@@ -1,0 +1,12 @@
+/tmp
+/node_modules
+/vendor
+/coverage
+/.bundle
+/log/*
+/local/
+/build/
+/.vscode/
+/.devcontainer/
+.env
+.docker_container_default.env
