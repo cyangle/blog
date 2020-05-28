@@ -1,17 +1,31 @@
 version: "3.7"
 services:
-  app:
+  app_dev:
+    image: "${PROJECT_NAME}:dev"
     build:
+      context: ..
+      dockerfile: Dockerfile
       target: builder
       args:
+        base_build_image: "${BASE_BUILD_IMAGE}"
+        base_app_image: "${BASE_APP_IMAGE}"
+        app_user: "${APP_USER}"
+        app_user_group: "${APP_USER_GROUP}"
+        app_root: ${APP_ROOT}
+        alpine_extra_build_packages: "${ALPINE_EXTRA_BUILD_PACKAGES}"
+        debian_extra_build_packages: "${DEBIAN_EXTRA_BUILD_PACKAGES}"
+        alpine_extra_production_packages: "${ALPINE_EXTRA_PRODUCTION_PACKAGES}"
+        debian_extra_production_packages: "${DEBIAN_EXTRA_PRODUCTION_PACKAGES}"
+        bundler_version: "${BUNDLER_VERSION}"
         rails_env: development
         node_env: development
-    image: "${PROJECT_NAME}:dev"
     container_name: "app.${PROJECT_NAME}_dev"
     hostname: "app.${PROJECT_NAME}_dev"
     ports:
       - "4000:3000"
-    env_file: .devcontainer/.docker_container_dev.env
+    depends_on:
+      - db_dev
+    env_file: .docker_container_dev.env
     environment:
       DB_HOST: "db_dev.${PROJECT_NAME}_dev"
     volumes:
@@ -35,17 +49,28 @@ services:
         volume:
           nocopy: true
       - type: bind
-        source: .
+        source: ..
         target: "${APP_ROOT}"
         consistency: cached
       # Uncomment the next line to use Docker from inside the container. See https://aka.ms/vscode-remote/samples/docker-in-docker-compose for details.
       # - /var/run/docker.sock:/var/run/docker.sock
     # Overrides default command so things don't shut down after the process ends.
     command: "sh -c 'sudo chown -R 1000:1000 $APP_USER_HOME && sleep infinity'"
-  db:
+  db_dev:
+    image: "postgres:${POSTGRES_IMAGE_VERSION}"
     container_name: "db.${PROJECT_NAME}_dev"
     hostname: "db.${PROJECT_NAME}_dev"
-    env_file: .devcontainer/.docker_container_dev.env
+    env_file: .docker_container_dev.env
+    environment:
+      POSTGRES_DB: postgres
+      # db super user name
+      POSTGRES_USER: ${DB_USER_NAME}
+      # db super user password
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - app_net
 
 networks:
   app_net:

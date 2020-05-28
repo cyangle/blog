@@ -1,9 +1,11 @@
 version: "3.7"
 services:
   app:
+    image: "${PROJECT_NAME}:latest"
     build:
       context: .
       dockerfile: Dockerfile
+      target: app
       args:
         base_build_image: "${BASE_BUILD_IMAGE}"
         base_app_image: "${BASE_APP_IMAGE}"
@@ -14,12 +16,13 @@ services:
         debian_extra_build_packages: "${DEBIAN_EXTRA_BUILD_PACKAGES}"
         alpine_extra_production_packages: "${ALPINE_EXTRA_PRODUCTION_PACKAGES}"
         debian_extra_production_packages: "${DEBIAN_EXTRA_PRODUCTION_PACKAGES}"
+        bundler_version: "${BUNDLER_VERSION}"
         rails_env: "${RAILS_ENV}"
         node_env: "${NODE_ENV}"
-        bundler_version: "${BUNDLER_VERSION}"
-      target: app
     container_name: "app.${PROJECT_NAME}"
     hostname: "app.${PROJECT_NAME}"
+    ports:
+      - "3000:3000"
     depends_on:
       - db
     env_file: .docker_container_default.env
@@ -44,3 +47,12 @@ services:
       - db_data:/var/lib/postgresql/data
     networks:
       - app_net
+
+networks:
+  app_net:
+    name: "${PROJECT_NAME}"
+    external: false
+
+volumes:
+  db_data:
+    name: "${PROJECT_NAME}_db_data"
