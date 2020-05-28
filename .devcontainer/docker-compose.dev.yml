@@ -10,8 +10,8 @@ services:
     container_name: "${PROJECT_NAME}_app_dev"
     hostname: "${PROJECT_NAME}_app_dev"
     ports:
-      - "4000:4000"
-    env_file: .docker_container_dev.env
+      - "4000:3000"
+    env_file: .devcontainer/.docker_container_dev.env
     environment:
       DB_HOST: "db_dev.${PROJECT_NAME}"
     volumes:
@@ -45,7 +45,7 @@ services:
   db:
     container_name: "db_dev.${PROJECT_NAME}"
     hostname: "db_dev.${PROJECT_NAME}"
-    env_file: .docker_container_dev.env
+    env_file: .devcontainer/.docker_container_dev.env
 
 volumes:
   db_data:
