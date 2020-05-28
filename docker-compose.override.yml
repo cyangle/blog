@@ -1,5 +1,11 @@
 version: "3.7"
 services:
   app:
+    image: "${PROJECT_NAME}:latest"
     ports:
       - "3000:3000"
+
+networks:
+  app_net:
+    name: "${PROJECT_NAME}"
+    external: false

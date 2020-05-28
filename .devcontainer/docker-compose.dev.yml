@@ -6,14 +6,14 @@ services:
       args:
         rails_env: development
         node_env: development
-    image: "${PROJECT_NAME}_app_dev:latest"
-    container_name: "${PROJECT_NAME}_app_dev"
-    hostname: "${PROJECT_NAME}_app_dev"
+    image: "${PROJECT_NAME}:dev"
+    container_name: "app.${PROJECT_NAME}_dev"
+    hostname: "app.${PROJECT_NAME}_dev"
     ports:
       - "4000:3000"
     env_file: .devcontainer/.docker_container_dev.env
     environment:
-      DB_HOST: "db_dev.${PROJECT_NAME}"
+      DB_HOST: "db_dev.${PROJECT_NAME}_dev"
     volumes:
       # Update this to wherever you want VS Code to mount the folder of your project
       - type: volume
@@ -43,9 +43,14 @@ services:
     # Overrides default command so things don't shut down after the process ends.
     command: "sh -c 'sudo chown -R 1000:1000 $APP_USER_HOME && sleep infinity'"
   db:
-    container_name: "db_dev.${PROJECT_NAME}"
-    hostname: "db_dev.${PROJECT_NAME}"
+    container_name: "db.${PROJECT_NAME}_dev"
+    hostname: "db.${PROJECT_NAME}_dev"
     env_file: .devcontainer/.docker_container_dev.env
+
+networks:
+  app_net:
+    name: "${PROJECT_NAME}_dev"
+    external: false
 
 volumes:
   db_data:

@@ -18,22 +18,21 @@ services:
         node_env: "${NODE_ENV}"
         bundler_version: "${BUNDLER_VERSION}"
       target: app
-    image: "${PROJECT_NAME}_app:latest"
-    container_name: "${PROJECT_NAME}_app"
-    hostname: "${PROJECT_NAME}_app"
+    container_name: "app.${PROJECT_NAME}"
+    hostname: "app.${PROJECT_NAME}"
     depends_on:
       - db
     env_file: .docker_container_default.env
     environment:
-      DB_HOST: "db_${RAILS_ENV}.${PROJECT_NAME}"
+      DB_HOST: "db.${PROJECT_NAME}"
       DB_USER_NAME: ${DB_USER_NAME}
       DB_PASSWORD: ${DB_PASSWORD}
     networks:
       - app_net
   db:
     image: "postgres:${POSTGRES_IMAGE_VERSION}"
-    container_name: "db_${RAILS_ENV}.${PROJECT_NAME}"
-    hostname: "db_${RAILS_ENV}.${PROJECT_NAME}"
+    container_name: "db.${PROJECT_NAME}"
+    hostname: "db.${PROJECT_NAME}"
     env_file: .docker_container_default.env
     environment:
       POSTGRES_DB: postgres
@@ -45,12 +44,6 @@ services:
       - db_data:/var/lib/postgresql/data
     networks:
       - app_net
-
-networks:
-  app_net:
-    name: "${PROJECT_NAME}"
-    external: false
-
 volumes:
   db_data:
     name: "${PROJECT_NAME}_${RAILS_ENV}_db_data"

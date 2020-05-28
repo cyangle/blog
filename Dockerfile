@@ -153,6 +153,9 @@ RUN bundle config --local frozen 1 \
 FROM builder AS assets
 ARG app_user_uid
 ARG app_user_gid
+# Secret key base is required to compile the assets
+# Here we use a dummy key at build time
+ARG SECRET_KEY_BASE=dummy
 ENV NODE_ENV=production
 ENV RAILS_ENV=production
 # Remove folders not needed in resulting image
