@@ -27,7 +27,11 @@ services:
       - db_dev
     env_file: .docker_container_dev.env
     environment:
-      DB_HOST: "db_dev.${PROJECT_NAME}_dev"
+      DB_HOST: "db.${PROJECT_NAME}_dev"
+      DB_USER_NAME: ${DB_USER_NAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - app_net
     volumes:
       # Update this to wherever you want VS Code to mount the folder of your project
       - type: volume
