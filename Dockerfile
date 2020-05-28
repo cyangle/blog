@@ -172,7 +172,7 @@ RUN if $(bundle exec rake -T | grep -e "rake assets:precompile" > /dev/null 2>&1
     bundle exec rake assets:precompile ; \
   fi
 # Remove unneeded files
-RUN rm -rf node_modules tmp/cache app/assets vendor/assets spec features
+RUN rm -rf node_modules tmp/cache vendor/assets spec features
 CMD echo 'Stage: assets'
 ############### libs stage done ###############
 

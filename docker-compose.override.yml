@@ -9,3 +9,7 @@ networks:
   app_net:
     name: "${PROJECT_NAME}"
     external: false
+
+volumes:
+  db_data:
+    name: "${PROJECT_NAME}_db_data"
