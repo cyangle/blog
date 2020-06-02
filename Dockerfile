@@ -1,6 +1,6 @@
 # First ARGs only used in instruction FROM
-ARG base_build_image="ruby:2.6.6-alpine"
-ARG base_app_image="ruby:2.6.6-alpine"
+ARG base_build_image="ruby:2.7.1-alpine"
+ARG base_app_image="ruby:2.7.1-alpine"
 # You can override ARG env vars on docker build or in docker-compose
 # Need to redeclare ARG env vars defined before FROM instruction in order to use it
 # ARG env vars are only available during building the image
@@ -205,6 +205,7 @@ ENV RAILS_ENV=production
 ENV BUNDLE_APP_CONFIG="$APP_ROOT/.bundle"
 ENV APP_NODE_PATH="$APP_ROOT/node_modules"
 ENV BUNDLE_PATH="$APP_ROOT/vendor/bundle"
+ENV RAILS_SERVE_STATIC_FILES=true
 # Reset user to root
 USER root:root
 # install packages
@@ -249,8 +250,8 @@ COPY --chown=$app_user_uid:$app_user_gid --from=assets $APP_ROOT $APP_ROOT
 USER $app_user_uid:$app_user_gid
 WORKDIR $APP_ROOT
 EXPOSE $app_port
-HEALTHCHECK --interval=5m --timeout=3s --start-period=10s --retries=5 \
-  CMD curl -f http://localhost:$app_port/ || exit 1
+HEALTHCHECK --interval=1m --timeout=3s --start-period=20s --retries=5 \
+  CMD curl -f http://localhost:$APP_PORT/ || exit 1
 # Simple init for container
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["/bin/sh", "-c", "bin/rails_server.sh"]
