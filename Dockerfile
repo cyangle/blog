@@ -1,6 +1,6 @@
 # First ARGs only used in instruction FROM
-ARG base_build_image="ruby:2.7.1-alpine"
-ARG base_app_image="ruby:2.7.1-alpine"
+ARG base_build_image="ruby:3.0.0-alpine"
+ARG base_app_image="ruby:3.0.0-alpine"
 # You can override ARG env vars on docker build or in docker-compose
 # Need to redeclare ARG env vars defined before FROM instruction in order to use it
 # ARG env vars are only available during building the image
@@ -12,7 +12,7 @@ ARG app_user_home="/home/$app_user"
 ARG app_root="$app_user_home/app"
 ARG rails_env=production
 ARG node_env=production
-ARG bundler_version="2.1.4"
+ARG bundler_version="2.2.3"
 ARG install_yarn=true
 ARG app_port="3000"
 ARG dev_ports="3000 4000 1234 26162"
